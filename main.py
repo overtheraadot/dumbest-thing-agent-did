@@ -18,6 +18,14 @@ OUTPUT_FILENAME = "entry.txt"
 
 
 def main() -> None:
+    # Gate guard: refuse to write unless the line satisfies the gate —
+    # one line, 1-200 characters, not only whitespace.
+    if "\n" in LINE or "\r" in LINE:
+        raise SystemExit("gate: entry must be a single line")
+    if not 1 <= len(LINE) <= 200:
+        raise SystemExit("gate: entry must be 1-200 characters")
+    if not LINE.strip():
+        raise SystemExit("gate: entry must not be only whitespace")
     output_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(output_dir, exist_ok=True)
     path = os.path.join(output_dir, OUTPUT_FILENAME)
